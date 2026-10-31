@@ -14,6 +14,7 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 interface NavbarProps {
   onOpenResume: () => void;
   onOpenPromptBlueprint: () => void;
+  onOpenHireMe: () => void;
   isDarkMode: boolean;
   onToggleTheme: () => void;
 }
@@ -21,6 +22,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenResume,
   onOpenPromptBlueprint,
+  onOpenHireMe,
   isDarkMode,
   onToggleTheme
 }) => {
@@ -112,13 +114,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {/* Primary Action Button */}
-            <a
-              href="#contact"
+            <button
+              onClick={onOpenHireMe}
               className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-lg shadow-sm shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-200 whitespace-nowrap shrink-0"
             >
               <span>Hire Me</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
 
             {/* Mobile menu toggle */}
             <button
@@ -148,6 +150,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-2 pt-1">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenHireMe();
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg shadow-md"
+              >
+                <ArrowUpRight className="w-3.5 h-3.5" />
+                <span>Hire Sridhar Now</span>
+              </button>
+
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);

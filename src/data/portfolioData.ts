@@ -86,7 +86,7 @@ export const DESIGN_SKILLS = [
 
 export const CREATIVE_SKILLS = [
   { name: "Canva", icon: "Sparkles" },
-  { name: "Content Creation", icon: "Video" },
+  { name: "Content Creator", icon: "Video" },
   { name: "E-book Design", icon: "BookOpen" },
   { name: "Mobile App UI Design", icon: "Smartphone" },
   { name: "Website UI Design", icon: "Globe" },
@@ -354,10 +354,10 @@ export const SERVICES: ServiceItem[] = [
   },
   {
     number: "07",
-    title: "Content Creation",
+    title: "Content Creator",
     description: "Creative visual storytelling that translates complex concepts into clear, engaging, and memorable digital media.",
     iconName: "Video",
-    deliverables: ["Educational Visuals", "Content Strategy", "Creative Direction", "Micro-copy"]
+    deliverables: ["Educational Visuals", "Content Strategy", "Creative Direction", "Visual Media Assets"]
   },
   {
     number: "08",
@@ -465,7 +465,7 @@ Display skills using beautiful cards with icons.
 DESIGN SKILLS:
 - UI/UX Design, Figma, Wireframing, Prototyping, User Research, User Flow, Design Thinking, Visual Design
 CREATIVE SKILLS:
-- Canva, Content Creation, E-book Design, Mobile App UI Design, Website UI Design, Google Stitch, AI Website Design
+- Canva, Content Creator, E-book Design, Mobile App UI Design, Website UI Design, Google Stitch, AI Website Design
 TECHNICAL & PROGRAMMING SKILLS:
 - Python (Data Science, AI & Development - IBM Certified)
 IMPORTANT:
@@ -494,7 +494,7 @@ Visual timeline:
 1. Research -> 2. Understand -> 3. Wireframing -> 4. UI Design -> 5. Prototyping -> 6. Testing & Improvement.
 
 9. MY SERVICES (What I Can Do For You)
-8 Service cards: UI/UX Design, Website UI Design, Mobile App UI Design, Landing Page Design, Canva Graphic Design, Social Media Post Design, Content Creation, E-book Design.
+8 Service cards: UI/UX Design, Website UI Design, Mobile App UI Design, Landing Page Design, Canva Graphic Design, Social Media Post Design, Content Creator, E-book Design.
 
 10. CERTIFICATIONS
 - IBM & Coursera: Introduction to UX/UI Design (Verified Credential QIYHZP1YD7VY)

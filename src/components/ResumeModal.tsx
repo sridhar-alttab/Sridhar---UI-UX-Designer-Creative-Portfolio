@@ -182,7 +182,7 @@ Available for Freelance Projects, Open to Internships, Remote Opportunities & Co
               Professional Summary
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              B.Sc Computer Science student passionate about UI/UX design, content creation, and creative digital experiences. Skilled in transforming complex ideas into user-friendly interfaces, designing modern layouts in Figma and Canva, and building engaging visual media.
+              B.Sc Computer Science student passionate about UI/UX design, working as an active Content Creator, and crafting creative digital experiences. Skilled in transforming complex ideas into user-friendly interfaces, designing modern layouts in Figma and Canva, and building engaging visual media.
             </p>
           </div>
 

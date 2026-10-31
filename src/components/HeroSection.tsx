@@ -18,9 +18,10 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface HeroSectionProps {
   onOpenResume: () => void;
+  onOpenHireMe: () => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume, onOpenHireMe }) => {
   return (
     <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden">
       {/* Ambient background glows */}
@@ -109,12 +110,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
                 <ArrowRight className="w-4 h-4" />
               </a>
 
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700/80 rounded-xl transition-all duration-200"
+              <button
+                onClick={onOpenHireMe}
+                className="inline-flex items-center gap-2 px-5 py-3 text-sm font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700/80 rounded-xl transition-all duration-200 hover:border-blue-500/50"
               >
                 <span>Hire Me</span>
-              </a>
+              </button>
 
               <button
                 onClick={onOpenResume}

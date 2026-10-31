@@ -87,7 +87,7 @@ export const AboutSection: React.FC = () => {
                       Focus Area
                     </div>
                     <div className="text-slate-200 font-medium mt-0.5">
-                      UI/UX & Content Creation
+                      UI/UX & Content Creator
                     </div>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export const AboutSection: React.FC = () => {
                 <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-3">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <h4 className="text-sm font-bold text-white">Creative Content & Storytelling</h4>
+                <h4 className="text-sm font-bold text-white">Content Creator & Storytelling</h4>
                 <p className="text-xs text-slate-400 mt-1 leading-normal">
                   Translating complex workflows into digestible visual content, carousels, guides, and e-books.
                 </p>

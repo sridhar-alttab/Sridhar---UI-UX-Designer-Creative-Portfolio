@@ -18,11 +18,13 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { ResumeModal } from './components/ResumeModal';
 import { PromptBlueprintModal } from './components/PromptBlueprintModal';
+import { HireMeModal } from './components/HireMeModal';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [resumeOpen, setResumeOpen] = useState(false);
   const [promptBlueprintOpen, setPromptBlueprintOpen] = useState(false);
+  const [hireMeOpen, setHireMeOpen] = useState(false);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -46,13 +48,17 @@ export default function App() {
       <Navbar
         onOpenResume={() => setResumeOpen(true)}
         onOpenPromptBlueprint={() => setPromptBlueprintOpen(true)}
+        onOpenHireMe={() => setHireMeOpen(true)}
         isDarkMode={isDarkMode}
         onToggleTheme={toggleTheme}
       />
 
       {/* Main Content Area */}
       <main className="flex-1">
-        <HeroSection onOpenResume={() => setResumeOpen(true)} />
+        <HeroSection 
+          onOpenResume={() => setResumeOpen(true)} 
+          onOpenHireMe={() => setHireMeOpen(true)}
+        />
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
@@ -60,7 +66,7 @@ export default function App() {
         <DesignProcessSection />
         <ServicesSection />
         <CertificationsSection />
-        <OpportunitiesSection />
+        <OpportunitiesSection onOpenHireMe={() => setHireMeOpen(true)} />
         <ContactSection />
       </main>
 
@@ -68,6 +74,11 @@ export default function App() {
       <Footer />
 
       {/* Interactive Modals */}
+      <HireMeModal
+        isOpen={hireMeOpen}
+        onClose={() => setHireMeOpen(false)}
+      />
+
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}

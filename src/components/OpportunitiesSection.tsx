@@ -9,7 +9,11 @@ import {
   Handshake
 } from 'lucide-react';
 
-export const OpportunitiesSection: React.FC = () => {
+interface OpportunitiesSectionProps {
+  onOpenHireMe: () => void;
+}
+
+export const OpportunitiesSection: React.FC<OpportunitiesSectionProps> = ({ onOpenHireMe }) => {
   const opportunityBadges = [
     { title: "Available for Freelance Projects", icon: <Briefcase className="w-4 h-4 text-blue-400" /> },
     { title: "Open to Internships", icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" /> },
@@ -45,7 +49,7 @@ export const OpportunitiesSection: React.FC = () => {
             </h2>
 
             <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
-              I'm open to creative collaborations, freelance projects and opportunities where I can use my design and content creation skills.
+              I'm open to creative collaborations, freelance projects and opportunities where I can use my UI/UX design and content creator skills.
             </p>
 
             {/* 4 Opportunity Badges */}
@@ -63,13 +67,13 @@ export const OpportunitiesSection: React.FC = () => {
 
             {/* Prominent Hire Me CTA button */}
             <div className="pt-6">
-              <a
-                href="#contact"
+              <button
+                onClick={onOpenHireMe}
                 className="inline-flex items-center gap-2 px-8 py-3.5 text-sm sm:text-base font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] transition-all duration-200"
               >
                 <span>Hire Me Now</span>
                 <ArrowRight className="w-5 h-5" />
-              </a>
+              </button>
             </div>
 
           </div>

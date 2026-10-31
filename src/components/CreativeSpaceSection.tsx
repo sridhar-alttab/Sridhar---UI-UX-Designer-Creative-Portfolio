@@ -38,13 +38,13 @@ export const CreativeSpaceSection: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-semibold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Content & Visual Media</span>
+            <span>Content Creator & Visual Media</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-display">
             My Creative Space
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Exploring digital storytelling, carousel design, educational infographics, and e-book publishing.
+            Showcasing digital storytelling, carousel design, educational infographics, and creative e-book publishing as a Content Creator.
           </p>
 
           {/* Quick Contact & Network Banner */}

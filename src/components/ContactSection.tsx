@@ -24,6 +24,7 @@ export const ContactSection: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
@@ -39,29 +40,90 @@ export const ContactSection: React.FC = () => {
     if (!form.subject.trim()) errs.subject = 'Please specify a subject.';
     if (!form.message.trim()) {
       errs.message = 'Please provide project or inquiry details.';
-    } else if (form.message.trim().length < 10) {
-      errs.message = 'Please enter at least 10 characters.';
+    } else if (form.message.trim().length < 6) {
+      errs.message = 'Please enter at least 6 characters.';
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getEmailSubject = () => {
+    return form.subject ? `[Portfolio Inquiry] ${form.subject}` : `[Portfolio Inquiry] New message from ${form.name}`;
+  };
+
+  const getEmailBody = () => {
+    return `Hi Sridhar,\n\nYou have a new inquiry from your portfolio website!\n\nName: ${form.name}\nEmail: ${form.email}\nSubject: ${form.subject}\n\nMessage:\n${form.message}\n\nSent from Portfolio Contact Form`;
+  };
+
+  const getWhatsAppText = () => {
+    return `Hi Sridhar! I saw your portfolio and want to connect.\n\n*Name:* ${form.name}\n*Email:* ${form.email}\n*Subject:* ${form.subject}\n\n*Message:* ${form.message}`;
+  };
+
+  const saveInquiry = () => {
+    try {
+      const existing = JSON.parse(localStorage.getItem('sridhar_inquiries') || '[]');
+      existing.unshift({
+        id: Date.now(),
+        date: new Date().toLocaleString(),
+        name: form.name,
+        email: form.email,
+        subject: form.subject,
+        message: form.message
+      });
+      localStorage.setItem('sridhar_inquiries', JSON.stringify(existing));
+    } catch (e) {}
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Trigger celebratory confetti
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
-    } catch (e) {
-      // safe fallback
-    }
+    setIsSubmitting(true);
+    saveInquiry();
 
-    setSubmitted(true);
+    try {
+      // Send form directly to Sridhar's inbox via FormSubmit AJAX API
+      await fetch(`https://formsubmit.co/ajax/${PERSONAL_INFO.email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: getEmailSubject(),
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          recipient: PERSONAL_INFO.email
+        })
+      });
+    } catch (err) {
+      // Even if network blocks cross-origin, local storage and one-click direct options are guaranteed
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      } catch (e) {}
+    }
+  };
+
+  const handleSendViaGmail = () => {
+    const subject = encodeURIComponent(getEmailSubject());
+    const body = encodeURIComponent(getEmailBody());
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${PERSONAL_INFO.email}&su=${subject}&body=${body}`;
+    window.open(gmailUrl, '_blank');
+  };
+
+  const handleSendViaWhatsApp = () => {
+    const text = encodeURIComponent(getWhatsAppText());
+    const waUrl = `https://wa.me/${PERSONAL_INFO.phoneRaw}?text=${text}`;
+    window.open(waUrl, '_blank');
   };
 
   const handleCopyEmail = () => {
@@ -278,33 +340,64 @@ export const ContactSection: React.FC = () => {
             <div className="rounded-3xl bg-slate-900/80 border border-slate-800 p-6 sm:p-8 shadow-xl">
               
               {submitted ? (
-                <div className="text-center py-12 space-y-4">
+                <div className="text-center py-10 space-y-6">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white font-display">
-                    Thank You for Reaching Out!
-                  </h3>
-                  <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                    Your message has been captured. Sridhar will review your note and get back to you promptly at <span className="text-blue-400 font-semibold">{form.email}</span>.
-                  </p>
                   
-                  <div className="pt-4 flex justify-center gap-3">
+                  <div className="space-y-1.5">
+                    <h3 className="text-2xl font-bold text-white font-display">
+                      Message Ready to Dispatch!
+                    </h3>
+                    <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                      Your inquiry has been formatted to send directly to Sridhar at <strong className="text-blue-400">{PERSONAL_INFO.email}</strong> and <strong className="text-emerald-400">{PERSONAL_INFO.phone}</strong>.
+                    </p>
+                  </div>
+
+                  {/* Guaranteed Sending Channels */}
+                  <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-3 max-w-lg mx-auto text-left">
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                      Choose Your Preferred Sending App:
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button
+                        onClick={handleSendViaGmail}
+                        className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all hover:scale-[1.01]"
+                      >
+                        <Mail className="w-4 h-4" />
+                        <span>Send via Gmail Web</span>
+                      </button>
+
+                      <button
+                        onClick={handleSendViaWhatsApp}
+                        className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01]"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        <span>Send via WhatsApp</span>
+                      </button>
+                    </div>
+
+                    <div className="pt-1 text-center">
+                      <a
+                        href={`mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(getEmailSubject())}&body=${encodeURIComponent(getEmailBody())}`}
+                        className="text-xs text-blue-400 hover:text-blue-300 underline"
+                      >
+                        Or launch Default Email Client (Apple Mail / Outlook)
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex justify-center">
                     <button
                       onClick={() => {
                         setSubmitted(false);
                         setForm({ name: '', email: '', subject: '', message: '' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition-colors"
+                      className="text-xs text-slate-400 hover:text-white underline transition-colors"
                     >
-                      Send Another Message
+                      Compose another message
                     </button>
-                    <a
-                      href={`mailto:${PERSONAL_INFO.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(`Hi Sridhar,\n\nFrom: ${form.name} (${form.email})\n\n${form.message}`)}`}
-                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors"
-                    >
-                      Open Email App
-                    </a>
                   </div>
                 </div>
               ) : (
@@ -411,15 +504,55 @@ export const ContactSection: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Submit Button */}
-                  <div className="pt-2">
+                  {/* Submit Actions */}
+                  <div className="pt-2 space-y-2.5">
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200"
+                      disabled={isSubmitting}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-60 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200"
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span>Sending Message to Sridhar...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Send Message (Email to {PERSONAL_INFO.email})</span>
+                        </>
+                      )}
                     </button>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (validate()) {
+                            saveInquiry();
+                            handleSendViaGmail();
+                          }
+                        }}
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 hover:text-white transition-colors border border-slate-700"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-blue-400" />
+                        <span>Send via Gmail Web</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (validate()) {
+                            saveInquiry();
+                            handleSendViaWhatsApp();
+                          }
+                        }}
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-xs font-semibold text-emerald-300 hover:text-white transition-colors border border-emerald-500/30"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Send via WhatsApp (+91 96776 23051)</span>
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}
